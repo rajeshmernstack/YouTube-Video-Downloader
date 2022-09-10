@@ -1,0 +1,89 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-iYQeCzEYFbKjA/T2uDLTpkwGzCiq6soy8tYaI1GyVh/UjpbCx/TYkiZhlZB6+fzT" crossorigin="anonymous">
+    <title>Youtube Video Downloader</title>
+</head>
+
+<body>
+    <nav class="navbar navbar-light bg-light">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="#">
+                <img src="https://cdn-icons-png.flaticon.com/512/7902/7902887.png" alt="" width="30" height="24"
+                    class="d-inline-block align-text-top">
+                YouTube Video Downloader
+            </a>
+        </div>
+    </nav>
+
+    <div class="container">
+        <div class="row mt-5">
+            <div class="col-md-8">
+                <form class="row g-3" id="yt-form">
+                    <div class="col-auto">
+                        <p class="form-control-plaintext">Enter YouTube Video URL</p>
+                    </div>
+                    <div class="col-auto">
+                        <input type="text" class="form-control" id="yt-video-url" placeholder="URL">
+                    </div>
+                    <div class="col-auto">
+                        <button type="submit" class="btn btn-primary mb-3">Download Video</button>
+                    </div>
+                </form>
+
+
+            </div>
+        </div>
+        <div class="row" id="all_videos_cards">
+            
+        </div>
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.1/jquery.min.js"
+        integrity="sha512-aVKKRRi/Q/YV+4mjoKBsE4x3H+BkegoM/em46NNlCqNTmUYADjBbeNefNxYV7giUp0VxICtqdrbqU7iVaeZNXA=="
+        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-u1OknCvxWvY5kfmNBILK2hRnQC3Pr17a+RTT6rIHI7NnikvbZlHgTPOOmMi466C8"
+        crossorigin="anonymous"></script>
+
+    <script>
+        $('#yt-form').on('submit', function (e) {
+            e.preventDefault();
+            let ytvideourl = $('#yt-video-url').val();
+            $.post('https://givefastlink.com/wp-json/aio-dl/video-data', { url: ytvideourl }, (data) => {
+                console.log(data);
+                let medias = data.medias;
+
+                let all_videos = "";
+                medias.map((item, index) => {
+                    console.log(item, index);
+                    if (item.audioAvailable && item.videoAvailable) {
+                        all_videos += `<div class="col-md-2">
+                <div class="card text-center">
+                    <div class="card-body">
+                        <div class="card-title">
+                            ${item.quality} ${item.extension} ${item.formattedSize}
+                        </div>
+                    </div>
+                    <div class="card-footer">
+                        <a href="${item.url}" class="btn btn-primary" target="_blank">Download</a>
+                    </div>
+                </div>
+            </div>`;
+                    }
+                })
+                $('#all_videos_cards').html(all_videos)
+            })
+            // console.log(ytvideourl)
+        })
+    </script>
+
+</body>
+
+</html>
