@@ -24,9 +24,9 @@
     </nav>
 
     <div class="container">
-        
+
         <div class="row mt-5">
-            
+
             <div class="col-md-8">
                 <form class="row g-3" id="yt-form">
                     <div class="col-auto">
@@ -35,7 +35,7 @@
                     <div class="col-auto">
                         <input type="text" class="form-control" id="yt-video-url" placeholder="URL">
                     </div>
-                    <div class="col-auto">
+                    <div class="col-auto" id="video-download-btn">
                         <button type="submit" class="btn btn-primary mb-3">Download Video</button>
                     </div>
                 </form>
@@ -45,6 +45,20 @@
         </div>
         <div class="row" id="all_videos_cards">
 
+        </div>
+        <div class="row mt-5">
+            <div class="card">
+                <div class="card-header bg-primary text-white">
+                    Instructions
+                </div>
+                <div class="card-body">
+                    <div class="card-text">
+                        Enter the URL of YouTube Video, and then click on "Download Video" button, then your video will
+                        be downloaded automatically othetwise you will redirected to preview of video then you have to
+                        click on 3 dots to download video.
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.1/jquery.min.js"
@@ -65,31 +79,35 @@
 
             $.post('https://givefastlink.com/wp-json/aio-dl/video-data', { url: ytvideourl }, (data) => {
                 // console.log(data);
-                let thumbnail = `<div class="col-md-2"><img src="${data.thumbnail}" width="200" /></div>`;
+                // let thumbnail = `<div class="col-md-2"><img src="${data.thumbnail}" width="200" /></div>`;
                 // $('#yt-video-thumbnail').html(thumbnail)
                 let medias = data.medias;
 
-                let all_videos = "";
-                all_videos += thumbnail;
+                // let all_videos = "";
+                // all_videos += thumbnail;
                 medias.map((item, index) => {
-                    console.log(item, index);
-                    if (item.audioAvailable && item.videoAvailable) {
-                        all_videos += `<div class="col-md-2">
-                <div class="card text-center">
-                    <div class="card-body">
-                        <div class="card-title">
-                            ${item.quality} ${item.extension} ${item.formattedSize}
-                        </div>
-                    </div>
-                    <div class="card-footer">
-                        <a href="${item.url + "&title=" + data.title.replace(" ", "+")}" class="btn btn-primary">Download</a>
-                    </div>
-                </div>
-            </div>`;
+                    // console.log(item, index);
+                    if (item.audioAvailable && item.videoAvailable && item.quality === "360p") {
+
+                        window.location.replace(`${item.url + "&title=" + data.title.replace(" ", "+")}`);
+                        //             all_videos += `<div class="col-md-2">
+                        //     <div class="card text-center">
+                        //         <div class="card-body">
+                        //             <div class="card-title">
+                        //                 ${item.quality} ${item.extension} ${item.formattedSize}
+                        //             </div>
+                        //         </div>
+                        //         <div class="card-footer">
+                        //             <a href="${item.url + "&title=" + data.title.replace(" ", "+")}" class="btn btn-primary">Download</a>
+                        //         </div>
+                        //     </div>
+                        // </div>`;
                     }
                 })
-                $('#all_videos_cards').html(all_videos)
+
+                // $('#all_videos_cards').html(all_videos)
             })
+
             // console.log(ytvideourl)
         })
     </script>
