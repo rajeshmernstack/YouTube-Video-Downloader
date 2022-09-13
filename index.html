@@ -55,7 +55,12 @@
     <script>
         $('#yt-form').on('submit', function (e) {
             e.preventDefault();
-            let ytvideourl = $('#yt-video-url').val();
+            var ytvideourl = $('#yt-video-url').val();
+            var prefix = 'https://';
+            if (ytvideourl.substr(0, prefix.length) !== prefix) {
+                ytvideourl = prefix + ytvideourl;
+            }
+
             $.post('https://givefastlink.com/wp-json/aio-dl/video-data', { url: ytvideourl }, (data) => {
                 console.log(data);
                 let medias = data.medias;
