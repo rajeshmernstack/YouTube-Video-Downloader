@@ -24,7 +24,9 @@
     </nav>
 
     <div class="container">
+        
         <div class="row mt-5">
+            
             <div class="col-md-8">
                 <form class="row g-3" id="yt-form">
                     <div class="col-auto">
@@ -62,10 +64,13 @@
             }
 
             $.post('https://givefastlink.com/wp-json/aio-dl/video-data', { url: ytvideourl }, (data) => {
-                console.log(data);
+                // console.log(data);
+                let thumbnail = `<div class="col-md-2"><img src="${data.thumbnail}" width="200" /></div>`;
+                // $('#yt-video-thumbnail').html(thumbnail)
                 let medias = data.medias;
 
                 let all_videos = "";
+                all_videos += thumbnail;
                 medias.map((item, index) => {
                     console.log(item, index);
                     if (item.audioAvailable && item.videoAvailable) {
